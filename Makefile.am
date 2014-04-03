@@ -9,3 +9,7 @@ q3py_la_LIBADD = $(PYTHON_EXTRA_LIBS)
 q3py_la_CFLAGS = $(PYTHON_CPPFLAGS) -std=c99
 
 pkginclude_HEADERS = src/q3py.h
+
+include doxygen.am
+MOSTLYCLEANFILES = $(DX_CLEANFILES)
+EXTRA_DIST = $(DX_CONFIG)
