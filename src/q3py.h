@@ -5,6 +5,14 @@
  * q3py provides functions to call back into the associated Quake 3
  * instance via syscalls.
  *
+ * This header is intended to be used by other Python extension modules
+ * to invoke q3py directly via its C API.
+ * To do so, q3py must be initialized in the calling module by invoking
+ * import_q3py() first before calling any other functions from its API.
+ *
+ * \note q3py currently does not expose the C API from this header
+ * to pure Python code at all.
+ *
  * The syscall numbers depend on the context in which this module
  * is running and the engine variant in use.
  * An example might be running as \e cgame in <em>id Quake 3 1.32c</em>
@@ -20,10 +28,8 @@
  * Due to difficulties with reliably passing variadic arguments
  * from the VM to the engine and vice versa, even Quake 3 only supports
  * a fixed maximum number of arguments internally. The exact number is
- * an engine implementation detail.
- * \warning
- * This magic number should be equal to the one used by q3py and
- * is as such sufficient to invoke any of the syscalls.
+ * an engine implementation detail, but q3py uses the same constants
+ * and implementation hack.
  * \warning \n
  * This is nothing that could be fixed by q3py as the syscall mechanism
  * in Quake 3 is doomed by design (pun intended).
@@ -40,6 +46,7 @@ extern "C" {
 #include <stdarg.h>
 
 
+/* TODO: Expose this via the capsule as well */
 /**
  * Invokes a Quake 3 system call.
  *
@@ -87,12 +94,13 @@ intptr_t q3py_syscall(intptr_t number, ...);
  */
 #define Q3PY_MODULE_NAME "q3py"
 /**
- * Name of the Python capsulse which exposes q3py's C API.
+ * Name of the Python capsule which exposes q3py's C API.
  */
 #define Q3PY_CAPI_CAPSULE_NAME "_C_API"
 /**
  * Number of function pointers in the C API capsule.
  */
+/* TODO: Move this into the private header */
 #define Q3PY_API_pointers 1
 
 
@@ -105,7 +113,7 @@ intptr_t q3py_syscall(intptr_t number, ...);
 /**
  * Pointer to q3py's C API capsule. Initialized via import_q3py().
  */
-static void **Q3Py_API;
+static void **Q3Py_API = NULL;
 
 
 /**
@@ -121,6 +129,10 @@ static void **Q3Py_API;
 /**
  * Function to import q3py's Python capsule, which is a
  * prerequisite to call any of q3py's C API functions.
+ *
+ * \warning If this is not called before invoking any other
+ * API function, a segfault will occur (\c NULL pointer dereference
+ * of Q3Py_API).
  *
  * \return \c 0 on success, \c -1 on failure.
  */
