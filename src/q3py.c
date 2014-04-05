@@ -5,9 +5,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "q3py_p.h"
 #define Q3PY_MODULE
 #include "q3py.h"
-#include "q3py_p.h"
 
 #define QDECL
 
