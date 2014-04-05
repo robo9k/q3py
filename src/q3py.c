@@ -1,3 +1,8 @@
+/**
+ * \file
+ * \brief Implementation of q3py.
+ */
+
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 
@@ -6,16 +11,13 @@
 #include <stdlib.h>
 
 #include "q3py_p.h"
+/** 
+ * Define that this is q3py itself, not another Python module
+ * importing it.
+ */
 #define Q3PY_MODULE
 #include "q3py.h"
 
-#define QDECL
-
-#define MAX_VMSYSCALL_ARGS 16
-
-#define ARRAY_LEN(x)			(sizeof(x) / sizeof(x[0]))
-
-typedef intptr_t (QDECL syscallptr)(intptr_t arg, ...);
 
 /** Context to store the global syscall pointer */
 static syscallptr *q3_syscall = NULL;
@@ -23,6 +25,15 @@ static syscallptr *q3_syscall = NULL;
 /** Context to store the Python vmMain callback */
 static PyObject *q3py_vmMain = NULL;
 
+/**
+ * Sets the vmMain Python callback to be used when Quake 3 invokes
+ * q3py's vmMain().
+ *
+ * \param[in] self Unused
+ * \param[in] args Python callable
+ *
+ * \return \c Py_None
+ */
 static PyObject* q3py_set_vmmain(const PyObject *self, PyObject *args) {
 	/* See https://docs.python.org/3/extending/extending.html#calling-python-functions-from-c */
 
@@ -45,6 +56,7 @@ static PyObject* q3py_set_vmmain(const PyObject *self, PyObject *args) {
 	return result;
 }
 
+/** Method definitions for the Python module */
 static PyMethodDef Q3PyMethods[] = {
 	// http://bugs.python.org/issue11587
 	{"set_vmmain", (PyCFunction)q3py_set_vmmain, METH_VARARGS | METH_KEYWORDS, ""},
@@ -52,14 +64,22 @@ static PyMethodDef Q3PyMethods[] = {
 	{NULL, NULL, 0, NULL}
 };
 
+/** Python module definition */
 static struct PyModuleDef q3pymodule = {
 	PyModuleDef_HEAD_INIT,
 	Q3PY_MODULE_NAME,
-	"",
+	"", /* TODO: Write this */
 	-1,
 	Q3PyMethods
 };
 
+/**
+ * Function to initialize the q3py Python module.
+ *
+ * This also creates the capsule to export q3py's C API.
+ *
+ * \return The q3py module
+ */
 PyObject* PyInit_q3py() {
 	/* See https://docs.python.org/3.4/extending/extending.html#providing-a-c-api-for-an-extension-module */
 
@@ -87,14 +107,31 @@ PyObject* PyInit_q3py() {
 }
 
 
-/*!
- * Main entry point for Quake 3.
+/**
+ * Main VM entry point for Quake 3. This is invoked by the engine whenever
+ * something needs to be done.
+ * The possible \p command values depend on the engine variant, e.g.
+ * <em>id Quake 1.32c</em> might call this with
+ * \code
+ * vmMain(GAME_INIT, 0, 42, 0);
+ * \endcode
+ *
+ * q3py just passes this onto its registered Python callback.
+ *
+ * \param[in] command Identifier of the VM call
+ * \param[in,out] arg0,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10, arg11
+ * Arguments for the VM call
+ *
+ * \return Result of the Python callback
+ *
+ * \sa The callback is set via q3py_set_vmmain().
  */
+/* TODO: Check whether the params are really used as [out] */
 Q3_API intptr_t vmMain(int command, int arg0, int arg1, int arg2,
 		int arg3, int arg4, int arg5, int arg6, int arg7, int arg8,
 		int arg9, int arg10, int arg11) {
-	PyObject *args = Py_BuildValue("iiiiiiiiiiiii", command, arg0, arg1, arg2, arg3,
-			arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
+	PyObject *args = Py_BuildValue("iiiiiiiiiiiii", command, arg0, arg1,
+			arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
 	if (args != NULL) {
 		PyObject *result = PyObject_CallObject(q3py_vmMain, args);
 		Py_DECREF(args);
@@ -120,6 +157,12 @@ Q3_API intptr_t vmMain(int command, int arg0, int arg1, int arg2,
 	return -1;
 }
 
+/**
+ * Initializes the embedded Python.
+ *
+ * Adds the q3py Python module and calls an initialization
+ * method in Python land.
+ */
 static void init_python() {
 	const int inittab = PyImport_AppendInittab(Q3PY_MODULE_NAME, &PyInit_q3py);
 	if (-1 == inittab) {
@@ -180,6 +223,18 @@ static void init_python() {
 	}
 }
 
+/**
+ * VM initialization function for Quake 3. The engine calls this once upon
+ * loading a VM.
+ *
+ * q3py initializes the embedded Python.
+ *
+ * \param[in] syscallptr Pointer to the engine's syscall function
+ *
+ * \sa The syscall function is exposed via q3py_syscall() and
+ * q3py_vsyscall().
+ */
+/* TODO: game/map_restart? */
 Q3_API void dllEntry(const syscallptr const *syscallptr) {
 	q3_syscall = syscallptr;
 
