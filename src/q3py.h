@@ -39,27 +39,6 @@ extern "C" {
 #include <inttypes.h>
 #include <stdarg.h>
 
-#if (defined _MSC_VER)
-#define Q3_API __declspec(dllexport)
-#elif (defined __SUNPRO_C)
-#define Q3_API __global
-#elif ((__GNUC__ >= 3) && (!__EMX__) && (!sun))
-#define Q3_API __attribute__((visibility("default")))
-#else
-/**
- * A macro to export functions that are part of the Quake 3 API.
- * \sa Q3PY_API is a variant for the q3py API.
- */
-/* TODO: Move Q3_API into private header */
-#define Q3_API
-#endif
-
-/**
- * A macro to export functions that are part of the q3py API.
- * \sa Q3_API is a variant for the Quake 3 API.
- */
-#define Q3PY_API Q3_API
-
 /**
  * Invokes a Quake 3 system call.
  *
@@ -74,7 +53,7 @@ extern "C" {
  *
  * \sa q3py_syscall() is a variadic variant.
  */
-Q3PY_API intptr_t q3py_vsyscall(intptr_t number, va_list args);
+intptr_t q3py_vsyscall(intptr_t number, va_list args);
 
 /**
  * Invokes a Quake 3 system call.
@@ -88,9 +67,9 @@ Q3PY_API intptr_t q3py_vsyscall(intptr_t number, va_list args);
  *
  * \return The return value of the syscall.
  *
- * \va q3py_vsyscall() is a variant with argument list.
+ * \sa q3py_vsyscall() is a variant with argument list.
  */
-Q3PY_API intptr_t q3py_syscall(intptr_t number, ...);
+intptr_t q3py_syscall(intptr_t number, ...);
 
 #define Q3PY_MODULE_NAME "q3py"
 #define Q3PY_CAPI_CAPSULE_NAME "_C_API"
