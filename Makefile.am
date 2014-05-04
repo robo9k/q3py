@@ -2,6 +2,9 @@ ACLOCAL_AMFLAGS = -I m4
 
 lib_LTLIBRARIES = q3py.la
 q3py_la_SOURCES = src/q3py.c
+## FIXME: q3py is not a regular library, but a module.
+##        Forcing `-module` breaks unit tests which link statically (OS X).
+##        Not using `-module` requires `lib` name prefix.
 q3py_la_LDFLAGS = -module -avoid-version -shared -export-dynamic \
 				  -export-symbols $(srcdir)/src/quake3-vm.sym \
 				  $(PYTHON_LDFLAGS) $(PYTHON_EXTRA_LDFLAGS)
