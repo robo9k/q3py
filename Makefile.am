@@ -13,3 +13,9 @@ include_HEADERS = src/q3py.h
 include $(srcdir)/doxygen.am
 MOSTLYCLEANFILES = $(DX_CLEANFILES)
 EXTRA_DIST = $(DX_CONFIG)
+
+TESTS = check_q3py
+check_PROGRAMS = check_q3py
+check_q3py_SOURCES = tests/check_q3py.c $(top_builddir)/src/q3py.h
+check_q3py_CFLAGS = @CHECK_CFLAGS@
+check_q3py_LDADD = $(top_builddir)/q3py.la @CHECK_LIBS@

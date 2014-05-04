@@ -12,4 +12,6 @@ DX_INIT_DOXYGEN([$PACKAGE_TARNAME], [doc/Doxyfile], [doxygen-doc])
 
 AX_PYTHON_DEVEL([>= '3.2'])
 
+AM_PATH_CHECK
+
 AC_OUTPUT([Makefile])
