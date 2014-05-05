@@ -51,7 +51,7 @@ extern "C" {
  * Invokes a Quake 3 system call.
  *
  * \param[in] number Identifier of the system call.
- * \param[in] args List of arguments for the system call.
+ * \param[in,out] args List of \c intptr_t arguments for the system call.
  *
  * \return Result of the syscall.
  *
@@ -80,7 +80,7 @@ intptr_t q3py_vsyscall(intptr_t number, va_list args);
  * Invokes a Quake 3 system call.
  *
  * \param[in] number Identifier of the system call.
- * \param[in] ... Arguments for the system call.
+ * \param[in,out] ... \c intptr_t arguments for the system call.
  *
  * \return Result of the syscall.
  *
@@ -119,7 +119,7 @@ static void **Q3Py_API = NULL;
 /**
  * Redefine q3py_syscall() to use the capsule.
  *
- * \warning import_q3py() needs to be called before invoking
+ * \pre import_q3py() needs to be called before invoking
  * this q3py_syscall() definition!
  */
 #define q3py_syscall \
