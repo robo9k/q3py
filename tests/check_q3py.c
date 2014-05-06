@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <check.h>
-#include "../src/q3py.h"
+#include "../src/q3py_p.h"
 
 
 START_TEST(test_dllEntry)
@@ -13,7 +13,9 @@ END_TEST
 START_TEST(test_vmMain)
 {
 	int cmd = 0, dummyArg = 0;
-	intptr_t res = vmMain(cmd, dummyArg, dummyArg);
+	intptr_t res = vmMain(cmd, dummyArg, dummyArg, dummyArg, dummyArg,
+			dummyArg, dummyArg, dummyArg, dummyArg, dummyArg, dummyArg,
+			dummyArg, dummyArg);
 }
 END_TEST
 

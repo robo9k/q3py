@@ -46,6 +46,8 @@ extern "C" {
 #include <stdarg.h>
 
 
+/* TODO: Use Q3PY_API defines here as well (?) */
+
 /* TODO: Expose this via the capsule as well */
 /**
  * Invokes a Quake 3 system call.

@@ -74,5 +74,44 @@ typedef intptr_t (QDECL syscallptr)(intptr_t arg, ...);
 #define Q3PY_API Q3_API
 
 
+/**
+ * Main VM entry point for Quake 3. This is invoked by the engine whenever
+ * something needs to be done.
+ * The possible \p command values depend on the engine variant, e.g.
+ * <em>id Quake 1.32c</em> might call this with
+ * \code
+ * vmMain(GAME_INIT, 0, 42, 0);
+ * \endcode
+ *
+ * q3py just passes this onto its registered Python callback.
+ *
+ * \param[in] command Identifier of the VM call
+ * \param[in,out] arg0,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10, arg11
+ * Arguments for the VM call
+ *
+ * \return Result of the Python callback
+ *
+ * \sa The callback is set via q3py_set_vmmain().
+ */
+/* TODO: Check whether the params are really used as [out] */
+Q3_API intptr_t vmMain(int command, int arg0, int arg1, int arg2,
+		int arg3, int arg4, int arg5, int arg6, int arg7, int arg8,
+		int arg9, int arg10, int arg11);
+
+/**
+ * VM initialization function for Quake 3. The engine calls this once upon
+ * loading a VM.
+ *
+ * q3py initializes the embedded Python.
+ *
+ * \param[in] syscallptr Pointer to the engine's syscall function
+ *
+ * \sa The syscall function is exposed via q3py_syscall() and
+ * q3py_vsyscall().
+ */
+/* TODO: game/map_restart? */
+Q3_API void dllEntry(const syscallptr const *syscallptr);
+
+
 #endif /* Q3PY_PRIVATE_H */
 
