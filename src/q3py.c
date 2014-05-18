@@ -125,9 +125,21 @@ PyObject* PyInit_q3py() {
 	return module;
 }
 
+/**
+ * Checks whether q3py_vmMain has been set and exits with an error if not.
+ */
+void check_vmMainPy() {
+	if (NULL == q3py_vmMain) {
+		fprintf(stderr, "vmMain Python method has not been set\n");
+		q3py_exit();
+	}
+}
+
 Q3_API intptr_t vmMain(int command, int arg0, int arg1, int arg2,
 		int arg3, int arg4, int arg5, int arg6, int arg7, int arg8,
 		int arg9, int arg10, int arg11) {
+
+	check_vmMainPy();
 
 	PyObject *args = Py_BuildValue("iiiiiiiiiiiii", command, arg0, arg1,
 			arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
@@ -229,7 +241,8 @@ Q3_API void dllEntry(const syscallptr * const syscallptr) {
 
 	init_python();
 	/* TODO: Split initialization of Python and dllEntry? */
-	/* TODO: Check whether q3py_set_vmmain has been called (or in vmMain itself) */
+
+	check_vmMainPy();
 }
 
 Q3PY_API intptr_t q3py_vsyscall(intptr_t number, va_list ap) {
