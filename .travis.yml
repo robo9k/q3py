@@ -1,0 +1,6 @@
+language: c
+compiler:
+    - gcc
+    - clang
+install: "sudo apt-get install -qq check"
+script: "autoreconf --install && ./configure && make && make check"
