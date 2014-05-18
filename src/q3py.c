@@ -25,6 +25,23 @@ static syscallptr *q3_syscall = NULL;
 /** Context to store the Python vmMain callback */
 static PyObject *q3py_vmMain = NULL;
 
+
+/**
+ * Tries to finalize Python, then exits.
+ */
+/* TODO: Mark this is noreturn for compilers to be happy */
+static void q3py_exit() {
+	/* Try to clean up Python */
+	Py_Finalize();
+
+	/*
+	 * Exit the whole process. While we are a library, there is no
+	 * clean and portable way to signal Quake 3 that we have hit a fatal
+	 * error, so just exit here.
+	 */
+	exit(EXIT_FAILURE);
+}
+
 /**
  * Sets the vmMain Python callback to be used when Quake 3 invokes
  * q3py's vmMain().
@@ -96,11 +113,13 @@ PyObject* PyInit_q3py() {
 	if (capsule != NULL) {
 		if (-1 == PyModule_AddObject(module, Q3PY_CAPI_CAPSULE_NAME, capsule)) {
 			fprintf(stderr, "Failed to add capsule to module\n");
+			return NULL;
 		}
 	}
 	else {
 		PyErr_Print();
 		fprintf(stderr, "Could not create capsule\n");
+		return NULL;
 	}
 
 	return module;
@@ -109,8 +128,10 @@ PyObject* PyInit_q3py() {
 Q3_API intptr_t vmMain(int command, int arg0, int arg1, int arg2,
 		int arg3, int arg4, int arg5, int arg6, int arg7, int arg8,
 		int arg9, int arg10, int arg11) {
+
 	PyObject *args = Py_BuildValue("iiiiiiiiiiiii", command, arg0, arg1,
 			arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
+
 	if (args != NULL) {
 		PyObject *result = PyObject_CallObject(q3py_vmMain, args);
 		Py_DECREF(args);
@@ -132,7 +153,7 @@ Q3_API intptr_t vmMain(int command, int arg0, int arg1, int arg2,
 		fprintf(stderr, "Failed building value for vmMain call\n");
 	}
 
-	/* TODO: Error handling */
+	q3py_exit();
 	return -1;
 }
 
@@ -146,7 +167,7 @@ static void init_python() {
 	const int inittab = PyImport_AppendInittab(Q3PY_MODULE_NAME, &PyInit_q3py);
 	if (-1 == inittab) {
 		fprintf(stderr, "Could not append Python module '%s'\n", Q3PY_MODULE_NAME);
-		exit(EXIT_FAILURE);
+		q3py_exit();
 	}
 
 	Py_Initialize();
@@ -155,8 +176,6 @@ static void init_python() {
 	const char *funcname = "dllentry", *modname = "q3py_hello";
 
 	/* See https://docs.python.org/3/extending/embedding.html#pure-embedding */
-
-	/* TODO: exit() on failures */
 
 	/*
 	 * TODO: https://docs.python.org/3/c-api/unicode.html#c.PyUnicode_FromString
@@ -184,6 +203,7 @@ static void init_python() {
 
 				PyErr_Print();
 				fprintf(stderr, "Calling init function '%s' failed\n", funcname);
+				q3py_exit();
 			}
 		}
 		else {
@@ -191,6 +211,7 @@ static void init_python() {
 				PyErr_Print();
 			}
 			fprintf(stderr, "Cannot find function '%s'\n", funcname);
+			q3py_exit();
 		}
 
 		Py_XDECREF(function);
@@ -199,6 +220,7 @@ static void init_python() {
 	else {
 		PyErr_Print();
 		fprintf(stderr, "Failed to load module '%s'\n", modname);
+		q3py_exit();
 	}
 }
 
