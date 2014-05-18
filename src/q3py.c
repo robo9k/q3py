@@ -248,6 +248,12 @@ static void init_python() {
 }
 
 Q3_API void dllEntry(const syscallptr * const syscallptr) {
+	/* A NULL pointer is the only invalid value we can check for */
+	if (NULL == syscallptr) {
+		fprintf(stderr, "NULL syscall pointer\n");
+		q3py_exit();
+	}
+
 	q3_syscall = syscallptr;
 
 	init_python();
