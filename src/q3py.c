@@ -128,6 +128,10 @@ PyObject* PyInit_q3py() {
 /**
  * Checks whether q3py_vmMain has been set and exits with an error if not.
  */
+/*
+ * TODO: Return a bool instead, so the caller can provide a more precise
+ * error message (and call q3py_exit() himself).
+ */
 void check_vmMainPy() {
 	if (NULL == q3py_vmMain) {
 		fprintf(stderr, "vmMain Python method has not been set\n");
