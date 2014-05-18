@@ -4,13 +4,31 @@
 
 
 /**
- * Calls dllEntry() directly without having setup
- * the vmMain Python method before.
+ * Calls dllEntry() with a NULL syscall pointer.
+ * This should fail with EXIT_FAILURE.
+ */
+START_TEST(test_dllEntry_NULL)
+{
+	dllEntry(NULL);
+}
+END_TEST
+
+
+/**
+ * Calls dllEntry() without setting up
+ * the vmMain Python method inside the Python
+ * entry point.
  * This should fail with EXIT_FAILURE.
  */
 START_TEST(test_dllEntry_noVmMainPy)
 {
-	dllEntry(NULL);
+	/*
+	 * Provide an arbitrary, non-NULL syscall pointer.
+	 * This won't be invoked since we're not calling vmMain().
+	 */
+	const syscallptr * const dummySyscall = (const syscallptr * const)42;
+
+	dllEntry(dummySyscall);
 }
 END_TEST
 
@@ -35,6 +53,7 @@ Suite* q3py_suite(void) {
 
 	TCase *tc_core = tcase_create("Core");
 
+	tcase_add_exit_test(tc_core, test_dllEntry_NULL, EXIT_FAILURE);
 	tcase_add_exit_test(tc_core, test_dllEntry_noVmMainPy, EXIT_FAILURE);
 	tcase_add_exit_test(tc_core, test_vmMain_noVmMainPy, EXIT_FAILURE);
 
