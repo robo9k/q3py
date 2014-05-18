@@ -112,7 +112,7 @@ Q3_API intptr_t vmMain(int command, int arg0, int arg1, int arg2,
  * q3py_vsyscall().
  */
 /* TODO: game/map_restart? */
-Q3_API void dllEntry(const syscallptr const *syscallptr);
+Q3_API void dllEntry(const syscallptr * const syscallptr);
 
 
 #endif /* Q3PY_PRIVATE_H */
