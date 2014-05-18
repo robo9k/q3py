@@ -139,6 +139,13 @@ Q3_API intptr_t vmMain(int command, int arg0, int arg1, int arg2,
 		int arg3, int arg4, int arg5, int arg6, int arg7, int arg8,
 		int arg9, int arg10, int arg11) {
 
+	/*
+	 * Check whether q3py_vmMain has been setup correctly.
+	 * This is also checked in dllEntry(), but we might be invoked without
+	 * the expected initialization order.
+	 * Ideally we would not check this on every invocation, as it imposes
+	 * some overhead.
+	 */
 	check_vmMainPy();
 
 	PyObject *args = Py_BuildValue("iiiiiiiiiiiii", command, arg0, arg1,
@@ -242,6 +249,7 @@ Q3_API void dllEntry(const syscallptr * const syscallptr) {
 	init_python();
 	/* TODO: Split initialization of Python and dllEntry? */
 
+	/* Check whether q3py_vmMain has been set within init_python() */
 	check_vmMainPy();
 }
 
