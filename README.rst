@@ -2,6 +2,9 @@
 q3py
 ====
 
+.. image:: https://travis-ci.org/robo9k/q3py.svg?branch=master
+    :target: https://travis-ci.org/robo9k/q3py
+
 q3py is a Quake 3 to Python bridge.
 
 Q3 allows its game modules to be loaded as a shared library. q3py
