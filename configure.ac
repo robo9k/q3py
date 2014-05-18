@@ -7,6 +7,7 @@ LT_INIT
 AC_CONFIG_MACRO_DIR([m4])
 
 AC_PROG_CC
+AC_PROG_CC_C99
 
 DX_INIT_DOXYGEN([$PACKAGE_TARNAME], [doc/Doxyfile], [doxygen-doc])
 

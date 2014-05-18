@@ -6,7 +6,7 @@ noinst_LTLIBRARIES = libq3py.la
 libq3py_la_SOURCES = src/q3py.c
 libq3py_la_LDFLAGS = $(PYTHON_LDFLAGS) $(PYTHON_EXTRA_LDFLAGS)
 libq3py_la_LIBADD = $(PYTHON_EXTRA_LIBS)
-libq3py_la_CFLAGS = $(PYTHON_CPPFLAGS) -std=c99
+libq3py_la_CFLAGS = $(PYTHON_CPPFLAGS)
 
 ## q3py is the module that is being installed
 lib_LTLIBRARIES = q3py.la
