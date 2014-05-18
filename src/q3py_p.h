@@ -10,6 +10,8 @@
 #ifndef Q3PY_PRIVATE_H
 #define Q3PY_PRIVATE_H
 
+#include <inttypes.h>
+
 
 /**
  * Quake 3 macro to use the cdecl calling convention (on Windows).
