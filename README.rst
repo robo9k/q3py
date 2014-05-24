@@ -23,7 +23,7 @@ A Cython module for the *game* (server) module of Q3 is in development.
 
 **This is a work in progress and not meant for public use (yet)**
 
-The `q3py documentation<https://robo9k.github.io/q3py/>`_ can be found
+The `q3py documentation <https://robo9k.github.io/q3py/>`_ can be found
 on its GitHub pages.
 
 License
