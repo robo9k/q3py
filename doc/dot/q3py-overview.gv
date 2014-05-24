@@ -1,0 +1,16 @@
+digraph q3py {
+	subgraph cluster_exe {
+		quake3 -> q3py -> libpython3 -> script;
+		script -> libpython3 -> q3py -> quake3;
+
+		quake3 [label="Q3"];
+		q3py [label=<q3py<br/><i>qagamex86_64.so</i>>];
+		libpython3 [label=<Python<br/><i>libpython3.2.so</i>>];
+		script [label=<<i>script.py</i>>];
+
+		label=<Quake 3<br/><i>ioq3ded.x86_64</i>>;
+		graph[style=dotted];
+		bgcolor=white;
+	}
+	bgcolor=transparent;
+}

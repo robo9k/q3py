@@ -1,4 +1,6 @@
 /**
 \mainpage
 TODO: Describe how quake3.exe <-> q3py.so <-> libpython.so <-> my.py works
+
+\dotfile "q3py-overview.gv" "Overview of the q3py architecture"
 */
