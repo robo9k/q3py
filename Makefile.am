@@ -3,7 +3,7 @@ ACLOCAL_AMFLAGS = -I m4
 ## libq3py is a convenience library to build both
 ## the q3py module as well as link it into the check programs
 noinst_LTLIBRARIES = libq3py.la
-libq3py_la_SOURCES = src/q3py.c
+libq3py_la_SOURCES = src/q3py.c src/q3py_p.h src/q3py.h
 libq3py_la_LDFLAGS = $(PYTHON_LDFLAGS) $(PYTHON_EXTRA_LDFLAGS)
 libq3py_la_LIBADD = $(PYTHON_EXTRA_LIBS)
 libq3py_la_CFLAGS = $(PYTHON_CPPFLAGS)
@@ -20,7 +20,7 @@ include_HEADERS = src/q3py.h
 
 include $(srcdir)/doxygen.am
 MOSTLYCLEANFILES = $(DX_CLEANFILES)
-EXTRA_DIST = $(DX_CONFIG)
+EXTRA_DIST = README.rst LICENSE doc src/quake3-vm.sym $(DX_CONFIG)
 
 TESTS = check_q3py
 check_PROGRAMS = check_q3py
