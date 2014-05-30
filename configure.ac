@@ -15,4 +15,5 @@ AX_PYTHON_DEVEL([>= '3.2'])
 
 AM_PATH_CHECK
 
-AC_OUTPUT([Makefile])
+AC_CONFIG_FILES([Makefile q3py.pc])
+AC_OUTPUT

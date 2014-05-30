@@ -18,6 +18,9 @@ q3py_la_LIBADD = libq3py.la
 
 include_HEADERS = include/q3py.h
 
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = q3py.pc
+
 include $(srcdir)/doxygen.am
 MOSTLYCLEANFILES = $(DX_CLEANFILES)
 EXTRA_DIST = README.rst LICENSE doc src/quake3-vm.sym $(DX_CONFIG)

@@ -1,0 +1,12 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: @PACKAGE_NAME@
+URL: @PACKAGE_URL@
+Description: Quake 3 to Python bridge
+Version: @PACKAGE_VERSION@
+Libs: -L${libdir} -lq3py
+Cflags: -I${includedir}
+Requires.private: python-@HAVE_PYTHON@
