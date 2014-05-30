@@ -16,7 +16,7 @@
  * importing it.
  */
 #define Q3PY_MODULE
-#include "q3py.h"
+#include <q3py.h>
 
 
 /** Context to store the global syscall pointer */
