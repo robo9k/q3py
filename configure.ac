@@ -13,7 +13,7 @@ DX_INIT_DOXYGEN([$PACKAGE_TARNAME], [doc/Doxyfile], [doxygen-doc])
 
 AX_PYTHON_DEVEL([>= '3.2'])
 
-AM_PATH_CHECK
+PKG_CHECK_MODULES([CHECK], [check >= 0.9.4])
 
 AC_CONFIG_FILES([Makefile q3py.pc])
 AC_OUTPUT
