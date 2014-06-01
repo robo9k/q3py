@@ -106,6 +106,19 @@ intptr_t q3py_syscall(intptr_t number, ...);
 #define Q3PY_API_pointers 1
 
 
+/* TODO: Both of these need to be configurable per module, see issue #10 */
+/**
+ * The name of the environment variable used to set the module
+ * for the dllMain entry point.
+ */
+#define Q3PY_ENV_ENTRYPOINT_MODULE "Q3PY_MODULE"
+/**
+ * The name of the environment variable used to set the method
+ * for the dllMain entry point.
+ */
+#define Q3PY_ENV_ENTRYPOINT_METHOD "Q3PY_METHOD"
+
+
 /**
  * If this header is included while building another Python
  * extension module, expose q3py's C API via a capsule.

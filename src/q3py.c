@@ -194,6 +194,7 @@ Q3_API intptr_t vmMain(int command, int arg0, int arg1, int arg2,
 	return -1;
 }
 
+
 /**
  * Initializes the embedded Python.
  *
@@ -210,8 +211,31 @@ static void init_python() {
 
 	Py_Initialize();
 
-	/* TODO: Those should be configureable (e.g. like setuptools entry points) */
-	const char *funcname = "dllentry", *modname = "q3py_hello";
+
+	/*
+	 * NOTE: Having one env var (e.g. "Q3PY_ENTRYPOINT") with value
+	 * "module:method" might be easier for the user to configure, but
+	 * C's string handling is meh.
+	 */
+	char *modname = getenv(Q3PY_ENV_ENTRYPOINT_MODULE);
+	if (NULL == modname) {
+		q3py_error("Entry point module (" Q3PY_ENV_ENTRYPOINT_MODULE ") "
+				"is not set");
+		q3py_exit();
+	}
+
+	char *funcname = getenv(Q3PY_ENV_ENTRYPOINT_METHOD);
+	if (NULL == modname) {
+		q3py_error("Entry point method (" Q3PY_ENV_ENTRYPOINT_METHOD ") "
+				"is not set");
+		q3py_exit();
+	}
+
+	char entrypoint_buffer[128];
+	snprintf(entrypoint_buffer, sizeof(entrypoint_buffer),
+			"Entry point is '%s:%s'", modname, funcname);
+	q3py_log(entrypoint_buffer);
+
 
 	/* See https://docs.python.org/3/extending/embedding.html#pure-embedding */
 
