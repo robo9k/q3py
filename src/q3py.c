@@ -85,7 +85,10 @@ static PyObject* q3py_set_vmmain(const PyObject *self, PyObject *args) {
 /** Method definitions for the Python module */
 static PyMethodDef Q3PyMethods[] = {
 	// http://bugs.python.org/issue11587
-	{"set_vmmain", (PyCFunction)q3py_set_vmmain, METH_VARARGS | METH_KEYWORDS, ""},
+	{"set_vmmain",
+		(PyCFunction)q3py_set_vmmain,
+		METH_VARARGS | METH_KEYWORDS,
+		""},
 
 	{NULL, NULL, 0, NULL}
 };
@@ -118,7 +121,8 @@ PyObject* PyInit_q3py() {
 	static void *Q3Py_API[Q3PY_API_pointers];
 	Q3Py_API[Q3PY_SYSCALL_NUM] = (void *)q3py_syscall;
 
-	PyObject *capsule = PyCapsule_New((void *)Q3Py_API, Q3PY_MODULE_NAME "." Q3PY_CAPI_CAPSULE_NAME, NULL);
+	PyObject *capsule = PyCapsule_New((void *)Q3Py_API,
+			Q3PY_MODULE_NAME "." Q3PY_CAPI_CAPSULE_NAME, NULL);
 	if (capsule != NULL) {
 		if (-1 == PyModule_AddObject(module, Q3PY_CAPI_CAPSULE_NAME, capsule)) {
 			q3py_error("Failed to add capsule '" Q3PY_CAPI_CAPSULE_NAME "' "
@@ -197,7 +201,8 @@ Q3_API intptr_t vmMain(int command, int arg0, int arg1, int arg2,
  * method in Python land.
  */
 static void init_python() {
-	const int inittab = PyImport_AppendInittab(Q3PY_MODULE_NAME, &PyInit_q3py);
+	const int inittab = PyImport_AppendInittab(Q3PY_MODULE_NAME,
+			&PyInit_q3py);
 	if (-1 == inittab) {
 		q3py_error("Could not append Python module '" Q3PY_MODULE_NAME "'");
 		q3py_exit();
