@@ -3,4 +3,7 @@
 TODO: Describe how quake3.exe <-> q3py.so <-> libpython.so <-> my.py works
 
 \dotfile "q3py-overview.gv" "Overview of the q3py architecture"
+
+For instructions on how to download, compile, install, configure
+and run q3py take a look at the \ref manual "user manual".
 */
