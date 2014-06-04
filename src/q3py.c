@@ -212,24 +212,25 @@ static void init_python() {
 	Py_Initialize();
 
 
-	/*
-	 * NOTE: Having one env var (e.g. "Q3PY_ENTRYPOINT") with value
-	 * "module:method" might be easier for the user to configure, but
-	 * C's string handling is meh.
-	 */
-	char *modname = getenv(Q3PY_ENV_ENTRYPOINT_MODULE);
-	if (NULL == modname) {
-		q3py_error("Entry point module (" Q3PY_ENV_ENTRYPOINT_MODULE ") "
-				"is not set");
+	char *entrypoint_env = getenv(Q3PY_ENV_ENTRYPOINT);
+	if (NULL == entrypoint_env) {
+		q3py_error("Entry point (" Q3PY_ENV_ENTRYPOINT ") is not set");
 		q3py_exit();
 	}
 
-	char *funcname = getenv(Q3PY_ENV_ENTRYPOINT_METHOD);
-	if (NULL == modname) {
-		q3py_error("Entry point method (" Q3PY_ENV_ENTRYPOINT_METHOD ") "
-				"is not set");
+	char entrypoint[strlen(entrypoint_env) + 1];
+	strncpy(entrypoint, entrypoint_env, sizeof(entrypoint));
+	entrypoint[sizeof(entrypoint)] = '\0';
+
+	char *entrypoint_separator = strchr(entrypoint, ':');
+	if (NULL == entrypoint_separator) {
+		q3py_error("Entry point is not well-formed");
 		q3py_exit();
 	}
+
+	*entrypoint_separator = '\0';
+
+	char *modname = entrypoint, *funcname = (entrypoint_separator + 1);
 
 	char entrypoint_buffer[128];
 	snprintf(entrypoint_buffer, sizeof(entrypoint_buffer),
