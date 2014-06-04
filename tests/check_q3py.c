@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <sysexits.h>
 #include <check.h>
 #include "../src/q3py_p.h"
 
@@ -53,9 +54,9 @@ Suite* q3py_suite(void) {
 
 	TCase *tc_core = tcase_create("Core");
 
-	tcase_add_exit_test(tc_core, test_dllEntry_NULL, EXIT_FAILURE);
-	tcase_add_exit_test(tc_core, test_dllEntry_noVmMainPy, EXIT_FAILURE);
-	tcase_add_exit_test(tc_core, test_vmMain_noVmMainPy, EXIT_FAILURE);
+	tcase_add_exit_test(tc_core, test_dllEntry_NULL, EX_USAGE);
+	tcase_add_exit_test(tc_core, test_dllEntry_noVmMainPy, EX_CONFIG);
+	tcase_add_exit_test(tc_core, test_vmMain_noVmMainPy, EX_CONFIG);
 
 	suite_add_tcase(suite, tc_core);
 

@@ -9,6 +9,7 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sysexits.h>
 
 #include "q3py_p.h"
 /** 
@@ -28,9 +29,11 @@ static PyObject *q3py_vmMain = NULL;
 
 /**
  * Tries to finalize Python, then exits.
+ *
+ * \param[in] status exit status code
  */
 /* TODO: Mark this is noreturn for compilers to be happy */
-static void q3py_exit() {
+static void q3py_exit(int status) {
 	/* Try to clean up Python */
 	Py_Finalize();
 
@@ -39,7 +42,7 @@ static void q3py_exit() {
 	 * clean and portable way to signal Quake 3 that we have hit a fatal
 	 * error, so just exit here.
 	 */
-	exit(EXIT_FAILURE);
+	exit(status);
 }
 
 /**
@@ -143,7 +146,7 @@ PyObject* PyInit_q3py() {
 void check_vmMainPy() {
 	if (NULL == q3py_vmMain) {
 		Q3PY_LOG_ERROR("vmMain Python method has not been set\n");
-		q3py_exit();
+		q3py_exit(EX_CONFIG);
 	}
 }
 
@@ -184,7 +187,7 @@ Q3_API intptr_t vmMain(int command, int arg0, int arg1, int arg2,
 		Q3PY_LOG_ERROR("Failed building Python value for vmMain call\n");
 	}
 
-	q3py_exit();
+	q3py_exit(EX_SOFTWARE);
 	return -1;
 }
 
@@ -200,7 +203,7 @@ static void init_python() {
 			&PyInit_q3py);
 	if (-1 == inittab) {
 		Q3PY_LOG_ERROR("Could not append Python module '"Q3PY_MODULE_NAME"'\n");
-		q3py_exit();
+		q3py_exit(EX_SOFTWARE);
 	}
 
 	Py_Initialize();
@@ -209,7 +212,7 @@ static void init_python() {
 	char *entrypoint_env = getenv(Q3PY_ENV_ENTRYPOINT);
 	if (NULL == entrypoint_env) {
 		Q3PY_LOG_ERROR("Entry point ("Q3PY_ENV_ENTRYPOINT") is not set\n");
-		q3py_exit();
+		q3py_exit(EX_CONFIG);
 	}
 
 	char entrypoint[strlen(entrypoint_env) + 1];
@@ -219,7 +222,7 @@ static void init_python() {
 	char *entrypoint_separator = strchr(entrypoint, ':');
 	if (NULL == entrypoint_separator) {
 		Q3PY_LOG_ERROR("Entry point '%s' is not well-formed (module:method)\n", entrypoint);
-		q3py_exit();
+		q3py_exit(EX_USAGE);
 	}
 
 	Q3PY_LOG_INFO("Entry point is '%s'\n", entrypoint);
@@ -256,7 +259,7 @@ static void init_python() {
 
 				PyErr_Print();
 				Q3PY_LOG_ERROR("Calling init method '%s:%s' failed\n", modname, funcname);
-				q3py_exit();
+				q3py_exit(EX_SOFTWARE);
 			}
 		}
 		else {
@@ -264,7 +267,7 @@ static void init_python() {
 				PyErr_Print();
 			}
 			Q3PY_LOG_ERROR("Can not find method '%s' in module '%s'\n", funcname, modname);
-			q3py_exit();
+			q3py_exit(EX_NOINPUT);
 		}
 
 		Py_XDECREF(function);
@@ -273,7 +276,7 @@ static void init_python() {
 	else {
 		PyErr_Print();
 		Q3PY_LOG_ERROR("Failed to load module '%s'\n", modname);
-		q3py_exit();
+		q3py_exit(EX_SOFTWARE);
 	}
 }
 
@@ -281,7 +284,7 @@ Q3_API void dllEntry(const syscallptr * const syscallptr) {
 	/* A NULL pointer is the only invalid value we can check for */
 	if (NULL == syscallptr) {
 		Q3PY_LOG_ERROR("NULL syscall pointer\n");
-		q3py_exit();
+		q3py_exit(EX_USAGE);
 	}
 
 	q3_syscall = syscallptr;
