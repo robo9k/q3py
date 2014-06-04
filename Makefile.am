@@ -32,5 +32,5 @@ EXTRA_DIST = README.rst LICENSE doc src/quake3-vm.sym $(DX_CONFIG)
 TESTS = check_q3py
 check_PROGRAMS = check_q3py
 check_q3py_SOURCES = tests/check_q3py.c
-check_q3py_CFLAGS = @CHECK_CFLAGS@
+check_q3py_CFLAGS = @CHECK_CFLAGS@ $(MAYBE_COVERAGE)
 check_q3py_LDADD = $(top_builddir)/libq3py.la @CHECK_LIBS@
