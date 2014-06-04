@@ -6,6 +6,11 @@ q3py
     :target: https://travis-ci.org/robo9k/q3py
     :alt: q3py build status on Travis CI
 
+.. image:: https://img.shields.io/coveralls/robo9k/q3py.svg
+    :target: https://coveralls.io/r/robo9k/q3py
+    :alt: q3py test coverage on coveralls
+
+
 ``q3py`` is a `Quake 3 <https://en.wikipedia.org/wiki/Quake_III_Arena>`_ to `Python <https://www.python.org/about/>`_ bridge.
 
 .. image:: https://robo9k.github.io/q3py/dot_q3py-overview.svg

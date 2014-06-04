@@ -15,5 +15,14 @@ AX_PYTHON_DEVEL([>= '3.2'])
 
 PKG_CHECK_MODULES([CHECK], [check >= 0.9.4])
 
+
+AC_ARG_ENABLE([gcov],
+  [AS_HELP_STRING([--enable-gcov],
+    [use Gcov instrumentation for test coverage])],
+    [],
+    [enable_gcov=no])
+AM_CONDITIONAL([COND_GCOV],[test '!' "$enable_gcov" = no])
+
+
 AC_CONFIG_FILES([Makefile q3py.pc])
 AC_OUTPUT

@@ -1,12 +1,16 @@
 ACLOCAL_AMFLAGS = -I m4
 
+if COND_GCOV
+   MAYBE_COVERAGE=--coverage --no-inline
+endif
+
 ## libq3py is a convenience library to build both
 ## the q3py module as well as link it into the check programs
 noinst_LTLIBRARIES = libq3py.la
 libq3py_la_SOURCES = src/q3py.c src/q3py_p.h
 libq3py_la_LDFLAGS = $(PYTHON_LDFLAGS) $(PYTHON_EXTRA_LDFLAGS)
 libq3py_la_LIBADD = $(PYTHON_EXTRA_LIBS)
-libq3py_la_CFLAGS = $(PYTHON_CPPFLAGS) -I$(top_srcdir)/include
+libq3py_la_CFLAGS = $(PYTHON_CPPFLAGS) -I$(top_srcdir)/include $(MAYBE_COVERAGE)
 
 ## q3py is the module that is being installed
 lib_LTLIBRARIES = q3py.la
@@ -22,7 +26,7 @@ pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = q3py.pc
 
 include $(srcdir)/doxygen.am
-MOSTLYCLEANFILES = $(DX_CLEANFILES)
+MOSTLYCLEANFILES = $(DX_CLEANFILES) *.gcda *.gcno
 EXTRA_DIST = README.rst LICENSE doc src/quake3-vm.sym $(DX_CONFIG)
 
 TESTS = check_q3py
