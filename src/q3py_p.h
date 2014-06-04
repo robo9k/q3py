@@ -115,5 +115,24 @@ Q3_API intptr_t vmMain(int command, int arg0, int arg1, int arg2,
 Q3_API void dllEntry(const syscallptr * const syscallptr);
 
 
+/**
+ * Macro to log a q3py error message.
+ *
+ * \param[in] ... Message and possibly arguments if formatted
+ *
+ * \sa printf() from stdio.h
+ */
+#define Q3PY_LOG_ERROR(...) fprintf(stderr, "Q3PY [ERROR]: " __VA_ARGS__)
+
+/**
+ * Macro to log a q3py info message.
+ *
+ * \param[in] ... Message and possibly arguments if formatted
+ *
+ * \sa printf() from stdio.h
+ */
+#define Q3PY_LOG_INFO(...) fprintf(stdout, "Q3PY [INFO]: " __VA_ARGS__)
+
+
 #endif /* Q3PY_PRIVATE_H */
 

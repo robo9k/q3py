@@ -26,15 +26,6 @@ static syscallptr *q3_syscall = NULL;
 static PyObject *q3py_vmMain = NULL;
 
 
-static void q3py_log(const char* message) {
-	fprintf(stdout, "Q3PY: %s\n", message);
-}
-
-static void q3py_error(const char* message) {
-	fprintf(stderr, "Q3PY: %s\n", message);
-}
-
-
 /**
  * Tries to finalize Python, then exits.
  */
@@ -112,9 +103,12 @@ static struct PyModuleDef q3pymodule = {
 PyObject* PyInit_q3py() {
 	/* See https://docs.python.org/3.4/extending/extending.html#providing-a-c-api-for-an-extension-module */
 
+	/* TODO: Python module name needs to depend on Quake 3 module name
+	 * if multiple instances (game, cgame, ui) are used in the same process.
+	 */
 	PyObject *module = PyModule_Create(&q3pymodule);
 	if (NULL == module) {
-		q3py_error("Failed to create module '" Q3PY_MODULE_NAME "'");
+		Q3PY_LOG_ERROR("Failed to create module '"Q3PY_MODULE_NAME"'\n");
 		return NULL;
 	}
 
@@ -125,14 +119,14 @@ PyObject* PyInit_q3py() {
 			Q3PY_MODULE_NAME "." Q3PY_CAPI_CAPSULE_NAME, NULL);
 	if (capsule != NULL) {
 		if (-1 == PyModule_AddObject(module, Q3PY_CAPI_CAPSULE_NAME, capsule)) {
-			q3py_error("Failed to add capsule '" Q3PY_CAPI_CAPSULE_NAME "' "
-			           "to module '" Q3PY_MODULE_NAME "'");
+			Q3PY_LOG_ERROR("Failed to add capsule '"Q3PY_CAPI_CAPSULE_NAME"' "
+					"to module '"Q3PY_MODULE_NAME"'\n");
 			return NULL;
 		}
 	}
 	else {
 		PyErr_Print();
-		q3py_error("Could not create capsule");
+		Q3PY_LOG_ERROR("Could not create capsule\n");
 		return NULL;
 	}
 
@@ -148,7 +142,7 @@ PyObject* PyInit_q3py() {
  */
 void check_vmMainPy() {
 	if (NULL == q3py_vmMain) {
-		q3py_error("vmMain Python method has not been set");
+		Q3PY_LOG_ERROR("vmMain Python method has not been set\n");
 		q3py_exit();
 	}
 }
@@ -181,13 +175,13 @@ Q3_API intptr_t vmMain(int command, int arg0, int arg1, int arg2,
 			if (PyErr_Occurred()) {
 				PyErr_Print();
 			}
-			q3py_error("vmMain result is not a long");
+			Q3PY_LOG_ERROR("vmMain result is not a long\n");
 			Py_XDECREF(result);
 		}
 	}
 	else {
 		PyErr_Print();
-		q3py_error("Failed building value for vmMain call");
+		Q3PY_LOG_ERROR("Failed building Python value for vmMain call\n");
 	}
 
 	q3py_exit();
@@ -205,7 +199,7 @@ static void init_python() {
 	const int inittab = PyImport_AppendInittab(Q3PY_MODULE_NAME,
 			&PyInit_q3py);
 	if (-1 == inittab) {
-		q3py_error("Could not append Python module '" Q3PY_MODULE_NAME "'");
+		Q3PY_LOG_ERROR("Could not append Python module '"Q3PY_MODULE_NAME"'\n");
 		q3py_exit();
 	}
 
@@ -214,7 +208,7 @@ static void init_python() {
 
 	char *entrypoint_env = getenv(Q3PY_ENV_ENTRYPOINT);
 	if (NULL == entrypoint_env) {
-		q3py_error("Entry point (" Q3PY_ENV_ENTRYPOINT ") is not set");
+		Q3PY_LOG_ERROR("Entry point ("Q3PY_ENV_ENTRYPOINT") is not set\n");
 		q3py_exit();
 	}
 
@@ -224,18 +218,14 @@ static void init_python() {
 
 	char *entrypoint_separator = strchr(entrypoint, ':');
 	if (NULL == entrypoint_separator) {
-		q3py_error("Entry point is not well-formed");
+		Q3PY_LOG_ERROR("Entry point '%s' is not well-formed (module:method)\n", entrypoint);
 		q3py_exit();
 	}
 
+	Q3PY_LOG_INFO("Entry point is '%s'\n", entrypoint);
+
 	*entrypoint_separator = '\0';
-
 	char *modname = entrypoint, *funcname = (entrypoint_separator + 1);
-
-	char entrypoint_buffer[128];
-	snprintf(entrypoint_buffer, sizeof(entrypoint_buffer),
-			"Entry point is '%s:%s'", modname, funcname);
-	q3py_log(entrypoint_buffer);
 
 
 	/* See https://docs.python.org/3/extending/embedding.html#pure-embedding */
@@ -253,9 +243,6 @@ static void init_python() {
 	PyObject *module = PyImport_Import(moduleName);
 	Py_DECREF(moduleName);
 
-	/* Buffer for formatted error messages, size chosen arbitrarily */
-	char error_message_buffer[128];
-
 	if (module != NULL) {
 		PyObject *function = PyObject_GetAttrString(module, funcname);
 		if (function && PyCallable_Check(function)) {
@@ -268,9 +255,7 @@ static void init_python() {
 				Py_DECREF(module);
 
 				PyErr_Print();
-				snprintf(error_message_buffer, sizeof(error_message_buffer),
-						"Calling init method '%s' failed", funcname);
-				q3py_error(error_message_buffer);
+				Q3PY_LOG_ERROR("Calling init method '%s:%s' failed\n", modname, funcname);
 				q3py_exit();
 			}
 		}
@@ -278,10 +263,7 @@ static void init_python() {
 			if (PyErr_Occurred()) {
 				PyErr_Print();
 			}
-			snprintf(error_message_buffer, sizeof(error_message_buffer),
-					"Can not find method '%s' in module '%s'",
-					funcname, modname);
-			q3py_error(error_message_buffer);
+			Q3PY_LOG_ERROR("Can not find method '%s' in module '%s'\n", funcname, modname);
 			q3py_exit();
 		}
 
@@ -290,9 +272,7 @@ static void init_python() {
 	}
 	else {
 		PyErr_Print();
-		snprintf(error_message_buffer, sizeof(error_message_buffer),
-				"Failed to load module '%s'", modname);
-		q3py_error(error_message_buffer);
+		Q3PY_LOG_ERROR("Failed to load module '%s'\n", modname);
 		q3py_exit();
 	}
 }
@@ -300,15 +280,12 @@ static void init_python() {
 Q3_API void dllEntry(const syscallptr * const syscallptr) {
 	/* A NULL pointer is the only invalid value we can check for */
 	if (NULL == syscallptr) {
-		q3py_error("NULL syscall pointer");
+		Q3PY_LOG_ERROR("NULL syscall pointer\n");
 		q3py_exit();
 	}
 
 	q3_syscall = syscallptr;
-	char message_buffer[128];
-	snprintf(message_buffer, sizeof(message_buffer),
-			"dllEntry called with syscall %p", syscallptr);
-	q3py_log(message_buffer);
+	Q3PY_LOG_INFO("dllEntry called with syscall %p\n", syscallptr);
 
 	init_python();
 	/* TODO: Split initialization of Python and dllEntry? */
