@@ -23,6 +23,12 @@ AC_ARG_ENABLE([gcov],
     [enable_gcov=no])
 AM_CONDITIONAL([COND_GCOV],[test '!' "$enable_gcov" = no])
 
+# Disabling inlining of functions works different in GCC, clang, etc.
+CFLAGS_DISABLE_INLINING=
+AX_CHECK_COMPILE_FLAG([-mllvm -inline-threshold=0], [CFLAGS_DISABLE_INLINING='-mllvm -inline-threshold=0'])
+AX_CHECK_COMPILE_FLAG([--no-inline], [CFLAGS_DISABLE_INLINING=--no-inline])
+AC_SUBST([CFLAGS_DISABLE_INLINING])
+
 
 AC_CONFIG_FILES([Makefile q3py.pc])
 AC_OUTPUT

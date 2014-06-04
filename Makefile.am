@@ -1,7 +1,7 @@
 ACLOCAL_AMFLAGS = -I m4
 
 if COND_GCOV
-   MAYBE_COVERAGE=--coverage --no-inline
+   MAYBE_COVERAGE=--coverage $(CFLAGS_DISABLE_INLINING)
 endif
 
 ## libq3py is a convenience library to build both
