@@ -10,4 +10,4 @@ install:
     - "sudo apt-get install -qq check"
 script: "autoreconf --install && ./configure --enable-gcov PYTHON_VERSION=3.2 && make && make check"
 after_success:
-    - coveralls --exclude tests
+    - coveralls --exclude tests --extension c
