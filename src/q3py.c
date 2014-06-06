@@ -148,6 +148,12 @@ PyObject* PyInit_q3py() {
 		return NULL;
 	}
 
+	int ok = PyModule_AddStringConstant(module, "__version__", PACKAGE_VERSION);
+	if (-1 == ok) {
+		Q3PY_LOG_ERROR("Could not add __version__ to '" Q3PY_MODULE_NAME "' module\n");
+		return NULL;
+	}
+
 	return module;
 }
 
