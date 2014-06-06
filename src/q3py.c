@@ -266,6 +266,8 @@ static void init_python() {
 		if (function && PyCallable_Check(function)) {
 			const PyObject *result = PyObject_CallObject(function, NULL);
 			if (result != NULL) {
+				/* TODO: Error handling */
+				q3py_set_vmmain_callable(result);
 				Py_DECREF(result);
 			}
 			else {
