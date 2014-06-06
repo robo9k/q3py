@@ -310,6 +310,8 @@ Q3_API void dllEntry(const syscallptr * const syscallptr) {
 
 	/* Check whether q3py_vmMain has been set within init_python() */
 	check_vmMainPy();
+
+	Q3PY_LOG_INFO("v" PACKAGE_VERSION " initialized");
 }
 
 Q3PY_API intptr_t q3py_vsyscall(intptr_t number, va_list ap) {
