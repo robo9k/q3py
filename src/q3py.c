@@ -46,6 +46,29 @@ static void q3py_exit(int status) {
 }
 
 /**
+ * Sets the vmMain Python callback.
+ *
+ * \param[in] borrowed reference of Python callable
+ *
+ * \return \c Py_None on success or \c NULL on error
+ */
+static PyObject* q3py_set_vmmain_callable(PyObject *callable) {
+	if (!PyCallable_Check(callable)) {
+		PyErr_SetString(PyExc_TypeError, "parameter must be callable");
+		return NULL;
+	}
+
+	Py_INCREF(callable);
+	Py_XDECREF(q3py_vmMain);
+	q3py_vmMain = callable;
+
+	/* For debugging purposes; */
+	//PyObject_Print(q3py_vmMain, stdout, 0);
+
+	Py_RETURN_NONE;
+}
+
+/**
  * Sets the vmMain Python callback to be used when Quake 3 invokes
  * q3py's vmMain().
  *
@@ -61,15 +84,7 @@ static PyObject* q3py_set_vmmain(const PyObject *self, PyObject *args) {
 	PyObject *temp;
 
 	if (PyArg_ParseTuple(args, "O:q3py_set_vmmain", &temp)) {
-		if (!PyCallable_Check(temp)) {
-			PyErr_SetString(PyExc_TypeError, "parameter must be callable");
-			return NULL;
-		}
-		Py_XINCREF(temp);
-		Py_XDECREF(q3py_vmMain);
-		q3py_vmMain = temp;
-		Py_INCREF(Py_None);
-		result = Py_None;
+		result = q3py_set_vmmain_callable(temp);
 	} else {
 		PyErr_Print();
 	}
