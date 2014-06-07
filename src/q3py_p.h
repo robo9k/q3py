@@ -32,7 +32,7 @@
 #define MAX_VMSYSCALL_ARGS 16
 
 
-/*
+/**
  * Macro adopted from Quake 3 to return the count of items in
  * an array.
  *

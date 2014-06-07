@@ -3,6 +3,12 @@
  * \brief Implementation of q3py.
  */
 
+/**
+ * Use `Py_ssize_t` instead of `int` for argument
+ * parsing and value building.
+ *
+ * \sa https://docs.python.org/3/c-api/arg.html
+ */
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 
@@ -48,7 +54,7 @@ static void q3py_exit(int status) {
 /**
  * Sets the vmMain Python callback.
  *
- * \param[in] borrowed reference of Python callable
+ * \param[in] callable Borrowed reference of Python callable
  *
  * \return \c Py_None on success or \c NULL on error
  */
@@ -91,6 +97,14 @@ static PyObject* q3py_set_vmmain(const PyObject *self, PyObject *args) {
 	return result;
 }
 
+/**
+ * Calls q3py_syscall() from Python.
+ *
+ * \param[in] self Unused
+ * \param[in] args Python arguments for the syscall
+ *
+ * \return The result of the syscall or \c NULL
+ */
 static PyObject *q3py_pysyscall(const PyObject *self, PyObject *args) {
 	intptr_t number;
 	intptr_t c_args[MAX_VMSYSCALL_ARGS - 1];
