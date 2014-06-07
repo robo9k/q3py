@@ -6,4 +6,15 @@ TODO: Describe how quake3.exe <-> q3py.so <-> libpython.so <-> my.py works
 
 For instructions on how to download, compile, install, configure
 and run q3py take a look at the \ref manual "user manual".
+
+\example q3py_hello.py
+To run this example;
+\code
+Q3PY_ENTRYPOINT='q3py_hello:dll_entry' PYTHONPATH=. ioq3ded +set vm_game 0 +map q3dm6
+\endcode
+
+Which sets this Python module and its `dll_entry()` method as q3py's
+entry point, instructs Python to look for modules in the current
+directory, starts the ioquake3 dedicated server with native game module
+and loads an arbitrary map.
 */
