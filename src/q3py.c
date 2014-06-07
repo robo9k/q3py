@@ -91,12 +91,58 @@ static PyObject* q3py_set_vmmain(const PyObject *self, PyObject *args) {
 	return result;
 }
 
+static PyObject *q3py_pysyscall(const PyObject *self, PyObject *args) {
+	intptr_t number;
+	intptr_t c_args[MAX_VMSYSCALL_ARGS - 1];
+
+	PyObject *py_number;
+	PyObject* py_args[MAX_VMSYSCALL_ARGS - 1];
+
+	PyObject *result = NULL;
+
+	for (size_t i = 0; i < ARRAY_LEN(c_args); ++i) {
+		c_args[i] = 0;
+		py_args[i] = NULL;
+	}
+
+	if (PyArg_ParseTuple(args, "O|OOOOOOOOOOOOOOO", &py_number, &py_args[0],
+				&py_args[1], &py_args[2], &py_args[3], &py_args[4],
+				&py_args[5], &py_args[6], &py_args[7], &py_args[8],
+				&py_args[9], &py_args[10], &py_args[11], &py_args[12],
+				&py_args[13], &py_args[14])) {
+		number = (intptr_t) PyLong_AsVoidPtr(py_number);
+
+		for (size_t i = 0; i < ARRAY_LEN(c_args); ++i) {
+			if (NULL != py_args[i]) {
+				/* PyLong_AsVoidPtr() segfaults with NULL argument */
+				c_args[i] = (intptr_t) PyLong_AsVoidPtr(py_args[i]);
+			}
+		}
+
+		intptr_t c_result = q3py_syscall(number, c_args[0], c_args[1],
+				c_args[2], c_args[3], c_args[4], c_args[5], c_args[6],
+				c_args[7], c_args[8], c_args[9], c_args[10], c_args[11],
+				c_args[12], c_args[13], c_args[14]);
+
+		result = Py_BuildValue("l", c_result);
+	} else {
+		PyErr_Print();
+	}
+
+	return result;
+}
+
 /** Method definitions for the Python module */
 static PyMethodDef Q3PyMethods[] = {
 	// http://bugs.python.org/issue11587
 	{"set_vmmain",
 		(PyCFunction)q3py_set_vmmain,
 		METH_VARARGS | METH_KEYWORDS,
+		""},
+
+	{"syscall",
+		(PyCFunction) q3py_pysyscall,
+		METH_VARARGS,
 		""},
 
 	{NULL, NULL, 0, NULL}
