@@ -24,6 +24,7 @@ deploy:
     api_key:
         secure: Q/LypIhTkXiPp+NFtlDaKqc6tMUy7YnGs5sV24UEgI/8B/SUojexqGczdvEwpFep2DuXcJQ6bsbBkNYS5KBWSg67gsP5J/LkbjytMM/FWdFTV/zhlmUK+mMnKVHhlaC78JIg6vRxuKPMVYlcM2zcGcnRPQS8X3t+FdDkvw54zDM=
     file: q3py-*.tar.gz
+    skip_cleanup: true
     on:
         repo: robo9k/q3py
         branch: master
