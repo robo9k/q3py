@@ -38,4 +38,8 @@ sphinx-dirhtml: doxygen-doc
 		-D project=$(PACKAGE_NAME) \
 		-D version=$(PACKAGE_VERSION) \
 		-D release=$(PACKAGE_VERSION) \
+		-D graphviz_output_format='svg' \
 		$(srcdir)/doc $(builddir)/sphinx-dirhtml
+
+# TODO:
+#		-D graphviz_dot=$(DX_DOT)

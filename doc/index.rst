@@ -16,6 +16,8 @@ implements the required Quake 3 API and delegates all calls to Python. To
 do so, it acts both as a Python C extension module and also embedds
 ``libpython3``.
 
+.. graphviz:: dot/q3py-overview.gv
+
 q3py can not be run on its own, a separate Python module is needed to
 implement the required game logic.
 
