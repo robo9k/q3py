@@ -9,6 +9,8 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_PROG_CC
 AC_PROG_CC_C99
 
+# enable Doxygen XML output for breathe
+DX_XML_FEATURE(ON)
 DX_INIT_DOXYGEN([$PACKAGE_TARNAME], [doc/Doxyfile], [doxygen-doc])
 
 AX_PYTHON_DEVEL([>= '3.2'])
