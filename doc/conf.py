@@ -45,6 +45,8 @@ source_suffix = '.rst'
 # The master toctree document.
 master_doc = 'index'
 
+ # Those (project, version, release) will be set via `sphinx-build -D ..` in Makefile.am
+
 # General information about the project.
 project = 'q3py'
 copyright = '2014, robo9k'
@@ -262,8 +264,8 @@ texinfo_documents = [
 
 
 breathe_projects = {
-    # This will be set via `sphind-build -D ..` in Makefile.am
-    "q3py": "$(builddir)/$(DX_DOCDIR)/xml"
+    # This will be set via `sphinx-build -D ..` in Makefile.am
+    "q3py": "doxygen-doc/xml"
 }
 
 breathe_default_project = "q3py"
