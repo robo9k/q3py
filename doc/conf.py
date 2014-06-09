@@ -35,6 +35,7 @@ import os
 extensions = [
     'breathe',
     'sphinx.ext.graphviz',
+    'sphinx.ext.todo',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -273,3 +274,5 @@ breathe_projects = {
 }
 
 breathe_default_project = "q3py"
+
+todo_include_todos = True
