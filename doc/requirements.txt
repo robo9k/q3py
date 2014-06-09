@@ -1,0 +1,8 @@
+#
+# pip requirements to build the breathe (Doxygen) / Sphinx documentation
+#
+
+breathe
+
+# Note that breathe itself depends on a certain Sphinx version
+#Sphinx
