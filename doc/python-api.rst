@@ -3,7 +3,7 @@ Python API
 
 q3py acts as a C extension module to the embedded Python.
 This allows the Python module to call back into Quake 3
-and configure q3py.
+and to configure q3py.
 
 
 .. py:module:: q3py
@@ -16,7 +16,7 @@ and configure q3py.
     being called by Quake 3.
 
     :param callable callback: The Python callable to use
-    :raises: TypeError: if ``callable`` is not a ``callable()``
+    :raises: TypeError: if ``callback`` is not a ``callable()``
 
 
 .. py:function:: syscall(num[, args])
