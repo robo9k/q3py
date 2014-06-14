@@ -21,6 +21,16 @@ As an example, you can run q3py like this;
     Furthermore it starts the dedicated server of ioquake3 and loads
     the map "q3dm6".
 
+The output from running this example might look like this::
+
+    Try loading dll file /home/robo9k/.q3a/q3py/qagamex86_64.so
+    Loading DLL file: /home/robo9k/.q3a/q3py/qagamex86_64.so
+    Sys_LoadGameDll(/home/robo9k/.q3a/q3py/qagamex86_64.so) found vmMain function at 0xdeadbeef
+    ]Q3PY [INFO]: dllEntry called with syscall 0xcafebabe
+    Q3PY [INFO]: Entry point is 'myq3py:init'
+    Q3PY [INFO]: v0.0.1 initialized
+
+
 q3py
 ----
 
@@ -64,3 +74,5 @@ entry point above, you need to tell it where to look at.
 
 You do so by adding the folder that contains the Python module to
 the :envvar:`PYTHONPATH` environment variable.
+
+.. todo:: virtualenv, venv, activate_this.py
