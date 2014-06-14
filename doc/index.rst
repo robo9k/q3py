@@ -44,6 +44,8 @@ Contents
     installation
     configuration
 
+    python-api
+
     testpage
 
 
