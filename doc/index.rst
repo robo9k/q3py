@@ -45,6 +45,7 @@ Contents
     configuration
 
     python-api
+    c-api
 
     testpage
 
