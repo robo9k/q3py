@@ -35,6 +35,7 @@ import os
 extensions = [
 #    'breathe',
     'sphinx.ext.graphviz',
+    'sphinx.ext.intersphinx',
     'sphinx.ext.todo',
 ]
 
@@ -276,3 +277,7 @@ breathe_projects = {
 breathe_default_project = "q3py"
 
 todo_include_todos = True
+
+intersphinx_mapping = {
+    'ioquake3': ('https://ioquake3.readthedocs.org', None),
+}

@@ -42,6 +42,7 @@ Contents
     :maxdepth: 2
 
     configuration
+    testpage
 
 
 License
