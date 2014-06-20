@@ -62,7 +62,7 @@ copyright = '2014, MIT license, robo9k'
 #
 # The full version, including alpha/beta/rc tags.
 release = subprocess.check_output(
-    ["../git-version-gen", ".tarball-version"],
+    ["../git-version-gen", "../.tarball-version"],
     universal_newlines=True
 )
 # The short X.Y version
