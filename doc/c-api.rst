@@ -9,6 +9,8 @@ header file ``include/q3py.h``.
 
 .. c:function:: intptr_t q3py_syscall(intptr_t number, ...)
 
+    .. versionadded:: 0.0.1
+
     Invokes a Quake 3 ``syscall``.
 
     :param number: The number of the syscall
@@ -18,6 +20,8 @@ header file ``include/q3py.h``.
 
 
 .. c:function:: int import_q3py()
+
+    .. versionadded:: 0.0.1
 
     Imports the q3py Python capsule into :c:data:`Q3Py_API`.
 
@@ -29,6 +33,8 @@ header file ``include/q3py.h``.
 
 
 .. c:var:: void** Q3Py_API
+
+    .. versionadded:: 0.0.1
 
     Holds a pointer to the q3py Python capsule.
 
