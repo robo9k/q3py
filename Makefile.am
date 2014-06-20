@@ -24,7 +24,8 @@ include_HEADERS = include/q3py.h
 
 include $(srcdir)/doxygen.am
 MOSTLYCLEANFILES = $(DX_CLEANFILES) *.gcda *.gcno
-EXTRA_DIST = README.rst LICENSE doc src/quake3-vm.sym $(DX_CONFIG) $(top_srcdir)/.version
+EXTRA_DIST = README.rst LICENSE doc src/quake3-vm.sym $(DX_CONFIG) \
+			 $(top_srcdir)/.version git-version-gen
 BUILT_SOURCES = $(top_srcdir)/.version
 
 $(top_srcdir)/.version:
