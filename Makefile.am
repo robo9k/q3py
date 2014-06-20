@@ -24,7 +24,13 @@ include_HEADERS = include/q3py.h
 
 include $(srcdir)/doxygen.am
 MOSTLYCLEANFILES = $(DX_CLEANFILES) *.gcda *.gcno
-EXTRA_DIST = README.rst LICENSE doc src/quake3-vm.sym $(DX_CONFIG)
+EXTRA_DIST = README.rst LICENSE doc src/quake3-vm.sym $(DX_CONFIG) $(top_srcdir)/.version
+BUILT_SOURCES = $(top_srcdir)/.version
+
+$(top_srcdir)/.version:
+	echo $(VERSION) > $@-t && mv $@-t $@
+dist-hook:
+	echo $(VERSION) > $(distdir)/.tarball-version
 
 TESTS = check_q3py
 check_PROGRAMS = check_q3py
