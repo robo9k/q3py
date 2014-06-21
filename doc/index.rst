@@ -39,8 +39,6 @@ Contents
     python-api
     c-api
 
-    testpage
-
 
 License
 -------
