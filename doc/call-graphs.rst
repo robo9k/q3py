@@ -2,7 +2,7 @@ Call graphs
 ===========
 
 The following graphs give an overview of how Quake 3, q3py, Python and
-finally the Python module interact with each other.
+finally your Python module interact with each other.
 
 Initialization
 --------------
@@ -38,3 +38,18 @@ Quake 3, q3py, Python and your Python module should have done their
 minimal initialization. Depending on the Quake 3 fork, the engine
 will now do an additional syscall into the game module (``GAME_INIT``) to
 initialize its state.
+
+.. note::
+    Quake 3 calls ``dllEntry`` only when a map is loaded, not when one
+    is restarted (it calls ``GAME_INIT`` in both cases and passes a
+    ``restart`` argument).
+
+    Furthermore there is no inverse operation such as ``dllExit``.
+    Quake 3 invokes syscalls such as ``GAME_SHUTDOWN`` and unloads
+    the shared library.
+    q3py does not implement ``_fini`` or such (see ``man dlclose(3)``).
+
+
+.. todo::
+    Investigate whether we need ``_fini`` or such to shutdown Python
+    or cleanup any other shared state.
