@@ -1,0 +1,35 @@
+digraph q3py {
+	subgraph cluster_q3 {
+		label = "Quake 3";
+		graph[style=dotted];
+		bgcolor=white;
+
+		VM_Call;
+	}
+
+	subgraph cluster_q3py {
+		label = "q3py";
+		graph[style=dotted];
+		bgcolor=white;
+
+		VM_Call -> vmMain;
+
+		vmMain -> q3py_vmMain;
+		vmMain -> VM_Call;
+	}
+
+	subgraph cluster_py {
+		label = "script.py";
+		graph[style=dotted];
+		bgcolor=white;
+
+		q3py_vmMain -> vm_main;
+		vm_main -> vmMain;
+	}
+
+	bgcolor=transparent;
+
+	VM_Call [label="VM_Call(GAME_INIT, time, restart, ...)"];
+	vmMain [label="vmMain(cmd, ...)"];
+	vm_main [label="vm_main(cmd, ...)"];
+}

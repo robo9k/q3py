@@ -53,3 +53,25 @@ initialize its state.
 .. todo::
     Investigate whether we need ``_fini`` or such to shutdown Python
     or cleanup any other shared state.
+
+
+Quake 3 calling q3py
+--------------------
+
+.. graphviz:: dot/quake3-calling-q3py.gv
+
+.. todo::
+    Graphviz layout with subgraph labels is unreadable.
+
+Quake 3 calls into the game modules via syscalls, for example to initialize
+the game state with ``GAME_INIT``.
+Do to so, the engine calls ``VM_Call`` on a VM it created previously and
+passes the syscall command (``GAME_INIT``) and arguments depending on the
+syscall (in the case of ``GAME_INIT`` those are ``levelTime``,
+``randomSeed`` and ``restart``).
+
+With a shared library as game module, its exported ``vmMain`` function
+is invoked with the syscall command and arguments. q3py looks up the
+configured Python callable in its global ``q3py_vmMain`` variable and
+calls it with the syscall command and arguments. q3py then passes the
+return value of the Python callable back to Quake 3.
