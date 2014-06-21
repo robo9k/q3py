@@ -56,6 +56,8 @@ with environment variables.
         :c:func:`init_python()`
 
 
+.. _configuration-quake3:
+
 Quake 3
 -------
 
