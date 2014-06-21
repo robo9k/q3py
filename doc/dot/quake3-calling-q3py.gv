@@ -4,7 +4,7 @@ digraph q3py {
 		graph[style=dotted];
 		bgcolor=white;
 
-		VM_Call;
+		SV_InitGameVM -> VM_Call;
 	}
 
 	subgraph cluster_q3py {
@@ -29,6 +29,7 @@ digraph q3py {
 
 	bgcolor=transparent;
 
+	SV_InitGameVM [label="SV_InitGameVM(restart)"];
 	VM_Call [label="VM_Call(GAME_INIT, time, restart, ...)"];
 	vmMain [label="vmMain(cmd, ...)"];
 	vm_main [label="vm_main(cmd, ...)"];
