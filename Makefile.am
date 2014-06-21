@@ -42,9 +42,6 @@ check_q3py_LDADD = $(top_builddir)/libq3py.la @CHECK_LIBS@
 sphinx-dirhtml: doxygen-doc
 	sphinx-build -b dirhtml \
 		-D breathe_projects.q3py=$(builddir)/$(DX_DOCDIR)/xml \
-		-D project=$(PACKAGE_NAME) \
-		-D version=$(PACKAGE_VERSION) \
-		-D release=$(PACKAGE_VERSION) \
 		-D graphviz_output_format='svg' \
 		$(srcdir)/doc $(builddir)/sphinx-dirhtml
 
