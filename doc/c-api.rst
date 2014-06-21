@@ -13,8 +13,8 @@ header file ``include/q3py.h``.
 
     Invokes a Quake 3 ``syscall``.
 
-    :param number: The number of the syscall
-    :param ...: The arguments for the syscall
+    :param intptr_t number: The number of the syscall
+    :param intptr_t ...: The arguments for the syscall
 
     :return: The result of the syscall
 
