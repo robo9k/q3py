@@ -35,6 +35,8 @@ Contents
 
     hello-world
 
+    call-graphs
+
     installation
     configuration
 
