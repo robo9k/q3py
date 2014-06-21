@@ -3,7 +3,7 @@ import ctypes
 
 
 # Game module initialization function.
-# defined in ioq3/code/game/g_public.h
+# Defined in ioq3/code/game/g_public.h
 GAME_INIT = 0
 
 # Engine system trap to print errors from game module.
