@@ -287,3 +287,5 @@ intersphinx_mapping = {
     'ioquake3': ('https://ioquake3.readthedocs.org', None),
     'python3': ('https://docs.python.org/3', None),
 }
+
+graphviz_output_format = 'svg'
