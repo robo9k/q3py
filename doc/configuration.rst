@@ -11,8 +11,8 @@ As an example, you can run q3py like this;
 .. sourcecode:: sh
     :linenos:
 
-    Q3PY_ENTRYPOINT="myq3py:init" \
-    PYTHONPATH="~/my-q3py-module/" \
+    Q3PY_ENTRYPOINT="q3py_hello:dll_entry" \
+    PYTHONPATH="q3py/doc/examples/" \
     ioq3ded +set vm_game 0 \
     +set fs_game "q3py" +map "q3dm6"
 
@@ -29,7 +29,7 @@ The output from running this example might look like this::
     Loading DLL file: /home/robo9k/.q3a/q3py/qagamex86_64.so
     Sys_LoadGameDll(/home/robo9k/.q3a/q3py/qagamex86_64.so) found vmMain function at 0xdeadbeef
     ]Q3PY [INFO]: dllEntry called with syscall 0xcafebabe
-    Q3PY [INFO]: Entry point is 'myq3py:init'
+    Q3PY [INFO]: Entry point is 'q3py_hello:dll_entry'
     Q3PY [INFO]: v0.0.1 initialized
 
 
