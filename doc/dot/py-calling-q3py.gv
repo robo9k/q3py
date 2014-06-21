@@ -1,0 +1,38 @@
+digraph q3py {
+	subgraph cluster_py {
+		label = "script.py";
+		graph[style=dotted];
+		bgcolor=white;
+
+		init_game -> qerror;
+	}
+
+	subgraph cluster_q3py {
+		label = "q3py";
+		graph[style=dotted];
+		bgcolor=white;
+
+		qerror -> q3py_syscall;
+
+		q3py_syscall -> q3_syscall;
+	}
+
+	subgraph cluster_q3 {
+		label = "Quake 3";
+		graph[style=dotted];
+		bgcolor=white;
+
+		q3_syscall -> VM_DllSyscall;
+		VM_DllSyscall -> SV_GameSystemCalls;
+		SV_GameSystemCalls -> Com_Error;
+	}
+
+	bgcolor=transparent;
+
+	init_game [label="init_game()"];
+	qerror [label="qerror(msg)"];
+	q3py_syscall [label="q3py_syscall(G_ERROR, ...)"];
+	VM_DllSyscall [label="VM_DllSyscall(cmd, ...)"];
+	SV_GameSystemCalls [label="SV_GameSystemCalls(cmd, ...)"];
+	Com_Error [label="Com_Error(ERR_DROP, ...)"];
+}

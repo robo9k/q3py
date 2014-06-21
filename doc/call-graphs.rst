@@ -75,3 +75,23 @@ is invoked with the syscall command and arguments. q3py looks up the
 configured Python callable in its global ``q3py_vmMain`` variable and
 calls it with the syscall command and arguments. q3py then passes the
 return value of the Python callable back to Quake 3.
+
+
+script.py calling q3py
+----------------------
+
+.. graphviz:: dot/py-calling-q3py.gv
+
+The game modules call back into Quake 3 via syscalls, for example to
+indicate a critical error.
+
+Your Python module can either use the q3py C or Python API. In both cases
+the ``q3py_syscall`` function is invoked with the syscall command and
+arguments. q3py passes those to its ``q3_syscall`` function pointer which
+it obtained during initialization earlier on.
+
+This function pointer aims at ``VM_DllSyscall``, a compability function
+which invokes the game system call dispatcher, e.g. ``SV_GameSystemCalls``,
+with the syscall command and arguments.
+The dispatcher then calls a function which matches the syscall command,
+e.g. ``Com_Error`` for ``G_ERROR``.
