@@ -2,6 +2,8 @@ env:
   global:
   - secure: "C0Uf9Md7zD8ebBrwogGVKkocBun7rTiKwEPwLQcEAlvpbFLkeDox7dfjxmlPEDa9/pMJPJCkd5/O0QPTbn6zazW0zQ8YmpUg9caFHU3I6FNF8qo/Rx6JD090vugR6dlDUvmUvDc3VIxgoN7MnhL77Iz1PZAK3m3rWfXS83FtiaM="
 
+language: c
+
 install:
 - sudo apt-get update -qq
 - sudo apt-get install -qq python3 python3-dev
