@@ -1,13 +1,18 @@
-language: c
-compiler:
-    - gcc
-    - clang
-before_install:
-    - sudo pip install cpp-coveralls
+env:
+  global:
+  - secure: "C0Uf9Md7zD8ebBrwogGVKkocBun7rTiKwEPwLQcEAlvpbFLkeDox7dfjxmlPEDa9/pMJPJCkd5/O0QPTbn6zazW0zQ8YmpUg9caFHU3I6FNF8qo/Rx6JD090vugR6dlDUvmUvDc3VIxgoN7MnhL77Iz1PZAK3m3rWfXS83FtiaM="
+
 install:
-    - "sudo apt-get update -qq"
-    - "sudo apt-get install -qq python3 python3-dev"
-    - "sudo apt-get install -qq check"
-script: "autoreconf --install && ./configure --enable-gcov PYTHON_VERSION=3.2 && make && make check"
-after_success:
-    - coveralls --exclude tests --extension c
+- sudo apt-get update -qq
+- sudo apt-get install -qq python3 python3-dev
+- sudo apt-get install -qq check
+
+addons:
+  coverity_scan:
+    project:
+      name: "robo9k/q3py"
+      description: "Quake 3 to Python bridge"
+    notification_email: "robo@9k.lv"
+    build_command_prepend: "autoreconf --install && ./configure PYTHON_VERSION=3.2 && make clean"
+    build_command: "make -j 4"
+    branch_pattern: "coverity_scan"
